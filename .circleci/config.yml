@@ -1,0 +1,35 @@
+version: 2.1
+jobs:
+  lint:
+    docker:
+      - image: golangci/golangci-lint:v1.18
+    steps:
+      - checkout
+      - run: "curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b $(go env GOPATH)/bin"
+      - run:
+          name: run lint
+          command: |
+            test ${CI_PULL_REQUEST} || exit 0
+            golangci-lint run \
+              --issues-exit-code 0 \
+              --out-format checkstyle \
+              --disable-all \
+              -E errcheck \
+              -E ineffassign \
+              -E interfacer \
+              -E unconvert \
+              -E misspell \
+              -E unparam \
+              -E nakedret \
+              -E prealloc >> result.txt
+            if [[ ${CI_PULL_REQUEST} ]]; then
+              cat result.txt | reviewdog -name golangci-lint -f checkstyler -reporter github-pr-review
+            else
+              exit [[ $(cat result.txt) == "" ]]
+            fi
+
+workflows:
+  version: 2.1
+  test:
+    jobs:
+      - lint
