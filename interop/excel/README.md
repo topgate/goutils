@@ -1,4 +1,4 @@
-# excel-csvjp
+# excel
 
 goの案件でExcelと相互運用目的のcsvを扱うことを求められた悲しみを背負った人向けのライブラリ　　
 
