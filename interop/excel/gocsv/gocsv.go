@@ -4,7 +4,7 @@ import (
 	"io"
 
 	"github.com/gocarina/gocsv"
-	"github.com/topgate/goutils/excel-csvjp/csv"
+	"github.com/topgate/goutils/interop/excel/csv"
 )
 
 // Unmarshal parses the CSV from the reader in the interface.
