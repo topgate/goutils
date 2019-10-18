@@ -13,25 +13,26 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - source-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Branch }}-
-            - source-
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}
   save_source_cache:
     steps:
       - save_cache:
-          key: source-{{ .Branch }}-{{ .Revision }}
+          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
   restore_go_cache:
     steps:
       - restore_cache:
           keys:
-            - go-packages-{{ .Branch }}-{{ checksum "go.sum" }}
-            - go-packages-{{ .Branch }}-
+            - go-packages-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "go.sum" }}
+            - go-packages-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - go-packages-{{ .Environment.CACHE_VERSION }}
   save_go_cache:
     steps:
       - save_cache:
-          key: go-packages-{{ .Branch }}-{{ checksum "go.sum" }}
+          key: go-packages-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "go.sum" }}
           paths:
             - "/home/circleci/go/pkg"
 
