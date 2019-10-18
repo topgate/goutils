@@ -1,0 +1,25 @@
+version: 2.1
+executors:
+  golang:
+    working_directory: &working_directory "~/goutils"
+    docker:
+      - image: circleci/golang:1.11
+        environment:
+          TZ: "Asia/Tokyo"
+          GOPATH: &gopath "/home/circleci/go"
+
+jobs:
+  test_go:
+    executor: golang
+    steps:
+      - checkout
+      - run:
+          name: exec server unit test
+          command: |
+            go test -v ./...
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test_go
