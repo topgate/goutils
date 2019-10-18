@@ -3,7 +3,7 @@ executors:
   golang:
     working_directory: &working_directory "~/goutils"
     docker:
-      - image: circleci/golang:1.13
+      - image: circleci/golang:1.11
         environment:
           TZ: "Asia/Tokyo"
           GOPATH: &gopath "/home/circleci/go"
