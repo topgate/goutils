@@ -1,0 +1,115 @@
+version: 2.1
+executors:
+  golang:
+    working_directory: &working_directory "~/goutils"
+    docker:
+      - image: circleci/golang:1.11
+        environment:
+          TZ: "Asia/Tokyo"
+          GOPATH: &gopath "/home/circleci/go"
+
+  golangci_lint:
+    working_directory: *working_directory
+    docker:
+      - image: golangci/golangci-lint
+        environment:
+          GOPATH: *gopath
+
+commands:
+  restore_source_cache:
+    steps:
+      - restore_cache:
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}
+  save_source_cache:
+    steps:
+      - save_cache:
+          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+  restore_go_cache:
+    steps:
+      - restore_cache:
+          keys:
+            - go-packages-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "go.sum" }}
+            - go-packages-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - go-packages-{{ .Environment.CACHE_VERSION }}
+  save_go_cache:
+    steps:
+      - save_cache:
+          key: go-packages-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "go.sum" }}
+          paths:
+            - "/home/circleci/go/pkg"
+
+jobs:
+  prepare_source:
+    executor: golang
+    steps:
+      - restore_source_cache
+      - checkout
+      - save_source_cache
+
+  prepare_go:
+    executor: golang
+    steps:
+      - restore_source_cache
+      - checkout
+      - restore_go_cache
+      - run:
+          name: initialize
+          command: go mod tidy
+      - save_go_cache
+
+  test_go:
+    executor: golang
+    steps:
+      - restore_source_cache
+      - checkout
+      - restore_go_cache
+      - run:
+          name: exec go test
+          command: |
+            go test -v ./...
+
+  lint_go:
+    executor: golangci_lint
+    steps:
+      - restore_source_cache
+      - checkout
+      - restore_go_cache
+      - run:
+          name: run golangci-lint
+          command: |
+            golangci-lint run --disable-all \
+              -E govet \
+              -E errcheck \
+              -E staticcheck \
+              -E golint \
+              -E unconvert \
+              -E goimports \
+              -E misspell \
+              -E unparam \
+              -E prealloc \
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - prepare_source
+      - prepare_go:
+          requires:
+            - prepare_source
+      - test_go:
+          requires:
+            - prepare_go
+  lint:
+    jobs:
+      - prepare_source
+      - prepare_go:
+          requires:
+            - prepare_source
+      - lint_go:
+          requires:
+            - prepare_go
