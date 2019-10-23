@@ -8,6 +8,13 @@ executors:
           TZ: "Asia/Tokyo"
           GOPATH: &gopath "/home/circleci/go"
 
+  golangci_lint:
+    working_directory: *working_directory
+    docker:
+      - image: golangci/golangci-lint
+        environment:
+          GOPATH: *gopath
+
 commands:
   restore_source_cache:
     steps:
@@ -66,6 +73,26 @@ jobs:
           command: |
             go test -v ./...
 
+  lint_go:
+    executor: golangci_lint
+    steps:
+      - restore_source_cache
+      - checkout
+      - restore_go_cache
+      - run:
+          name: run golangci-lint
+          command: |
+            golangci-lint run --disable-all \
+              -E govet \
+              -E errcheck \
+              -E staticcheck \
+              -E golint \
+              -E unconvert \
+              -E goimports \
+              -E misspell \
+              -E unparam \
+              -E prealloc \
+
 workflows:
   version: 2
   test:
@@ -75,5 +102,14 @@ workflows:
           requires:
             - prepare_source
       - test_go:
+          requires:
+            - prepare_go
+  lint:
+    jobs:
+      - prepare_source
+      - prepare_go:
+          requires:
+            - prepare_source
+      - lint_go:
           requires:
             - prepare_go
