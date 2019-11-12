@@ -171,6 +171,7 @@ func testWriter(t *testing.T, expected string, given [][]string, generator func(
 		assertions := assert.New(t)
 		iw := &bytes.Buffer{}
 		writer := generator(iw)
+		assertions.True(writer.UseCRLF)
 		err := writer.WriteAll(given)
 		if !assertions.NoError(err) {
 			return
