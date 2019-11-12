@@ -1,7 +1,9 @@
 package csv
 
 import (
+	"bufio"
 	"encoding/csv"
+	"errors"
 	"io"
 	"testing"
 
@@ -91,6 +93,13 @@ func TestReaders(t *testing.T) {
 			nil,
 			"",
 		},
+		{
+			"2byte",
+			[][]string{
+				[]string{"v", ""},
+			},
+			"v,",
+		},
 	}
 	for _, tt := range tests {
 		tt := tt
@@ -137,6 +146,48 @@ func TestWriters(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			testWriter(t, tt.expected, tt.given, NewUTF8WithBOMWriter, toUTF8WithBOM)
 			testWriter(t, tt.expected, tt.given, NewSJISWriter, toSJIS)
+		})
+	}
+}
+
+func TestUTF8WithBOMReader_InvalidCases(t *testing.T) {
+	var tests = []struct {
+		name     string
+		expected error
+		given    []byte
+	}{
+		{"無効なBOM", errors.New("Invalid UTF8 BOM"), toSJIS("col1,col2,col3\nv1,v2,v3")},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			reader := NewUTF8WithBOMReader(bytes.NewReader(tt.given))
+			actual, err := reader.ReadAll()
+			assertions := assert.New(t)
+			assertions.EqualError(err, tt.expected.Error())
+			assertions.Empty(actual)
+		})
+	}
+}
+
+func TestSJISWriter_PanicCases(t *testing.T) {
+	var tests = []struct {
+		name     string
+		expected string
+		given    io.Writer
+	}{
+		{"*bufio.Writer", "Can't use *bufio.Writer in SJIS", bufio.NewWriter(&bytes.Buffer{})},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			assertions := assert.New(t)
+			defer func() {
+				err := recover()
+				assertions.EqualValues(tt.expected, err)
+			}()
+
+			NewSJISWriter(tt.given)
 		})
 	}
 }
