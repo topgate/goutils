@@ -1,7 +1,9 @@
 package csv
 
 import (
+	"bufio"
 	"encoding/csv"
+	"errors"
 	"io"
 
 	"bytes"
@@ -36,6 +38,10 @@ func NewReader(r io.Reader) *csv.Reader {
 
 // NewSJISWriter 与えられたio.Writerを元に新しいSJISのcsvライターを返す。UseCRLFはデフォルトでtrueが設定される
 func NewSJISWriter(w io.Writer) *csv.Writer {
+	if _, ok := w.(*bufio.Writer); ok {
+		panic("Can't use *bufio.Writer in SJIS")
+
+	}
 	writer := csv.NewWriter(transform.NewWriter(w, japanese.ShiftJIS.NewEncoder()))
 	writer.UseCRLF = true
 	return writer
@@ -83,6 +89,10 @@ func (u *utf8WIthBOMByteReader) Read(p []byte) (int, error) {
 		if err != nil {
 			return n, err
 		}
+		if !bytes.Equal(UTF8BOM[:], bom[:]) {
+			return n, errors.New("Invalid UTF8 BOM")
+
+		}
 	}
 	return u.reader.Read(p)
 }
@@ -95,16 +105,13 @@ type hybridByteReader struct {
 func (h *hybridByteReader) Read(p []byte) (int, error) {
 	if !h.readBOM {
 		bom := [len(UTF8BOM)]byte{}
-		utf8WithBOM := false
 		n, err := h.reader.Read(bom[:])
 		h.readBOM = true
 		if err != nil {
 			return n, err
-		} else if n >= len(UTF8BOM) && bytes.Equal(UTF8BOM[:], bom[:]) {
-			utf8WithBOM = true
 		}
-		if !utf8WithBOM {
-			h.reader = transform.NewReader(io.MultiReader(bytes.NewReader(bom[:]), h.reader), japanese.ShiftJIS.NewDecoder())
+		if n < len(UTF8BOM) || !bytes.Equal(UTF8BOM[:], bom[:]) {
+			h.reader = transform.NewReader(io.MultiReader(bytes.NewReader(bom[:n]), h.reader), japanese.ShiftJIS.NewDecoder())
 		}
 	}
 	return h.reader.Read(p)
