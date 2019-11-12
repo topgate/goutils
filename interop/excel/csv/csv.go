@@ -39,7 +39,7 @@ func NewReader(r io.Reader) *csv.Reader {
 // NewSJISWriter 与えられたio.Writerを元に新しいSJISのcsvライターを返す。UseCRLFはデフォルトでtrueが設定される
 func NewSJISWriter(w io.Writer) *csv.Writer {
 	if _, ok := w.(*bufio.Writer); ok {
-		panic("Can't use *bufio.Writer in SJIS")
+		panic("Can't use *bufio.Writer")
 
 	}
 	writer := csv.NewWriter(transform.NewWriter(w, japanese.ShiftJIS.NewEncoder()))
@@ -49,6 +49,9 @@ func NewSJISWriter(w io.Writer) *csv.Writer {
 
 // NewUTF8WithBOMWriter 与えられたio.Writerを元に新しいBOM付きUTF8のcsvライターを返す。UseCRLFはデフォルトでtrueが設定される
 func NewUTF8WithBOMWriter(w io.Writer) *csv.Writer {
+	if _, ok := w.(*bufio.Writer); ok {
+		panic("Can't use *bufio.Writer")
+	}
 	writer := csv.NewWriter(&utf8WithBOMByteWriter{
 		wroteBOM: false,
 		writer:   w,

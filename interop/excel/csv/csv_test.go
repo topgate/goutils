@@ -170,17 +170,17 @@ func TestUTF8WithBOMReader_InvalidCases(t *testing.T) {
 	}
 }
 
-func TestSJISWriter_PanicCases(t *testing.T) {
+func TestWriter_PanicCases(t *testing.T) {
 	var tests = []struct {
 		name     string
 		expected string
 		given    io.Writer
 	}{
-		{"*bufio.Writer", "Can't use *bufio.Writer in SJIS", bufio.NewWriter(&bytes.Buffer{})},
+		{"*bufio.Writer", "Can't use *bufio.Writer", bufio.NewWriter(&bytes.Buffer{})},
 	}
 	for _, tt := range tests {
 		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
+		t.Run(tt.name+":"+reflect.GetFunctionName(NewSJISWriter), func(t *testing.T) {
 			assertions := assert.New(t)
 			defer func() {
 				err := recover()
@@ -188,6 +188,15 @@ func TestSJISWriter_PanicCases(t *testing.T) {
 			}()
 
 			NewSJISWriter(tt.given)
+		})
+		t.Run(tt.name+":"+reflect.GetFunctionName(NewUTF8WithBOMWriter), func(t *testing.T) {
+			assertions := assert.New(t)
+			defer func() {
+				err := recover()
+				assertions.EqualValues(tt.expected, err)
+			}()
+
+			NewUTF8WithBOMWriter(tt.given)
 		})
 	}
 }
