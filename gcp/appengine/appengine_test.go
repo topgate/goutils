@@ -17,11 +17,13 @@ func TestNewContext(t *testing.T) {
 			projectID   *string
 			serviceName *string
 			version     *string
+			traceID     *string
 		}
 		expected struct {
 			projectID   string
 			serviceName string
 			version     string
+			traceID     string
 		}
 	)
 	cases := []struct {
@@ -30,29 +32,33 @@ func TestNewContext(t *testing.T) {
 		expected expected
 	}{
 		{
-			name: "環境変数設定済み_環境変数の正しく設定されること",
+			name: "環境変数、リクエストヘッダ設定済み_設定された値が正しく設定されること",
 			prepare: prepare{
 				projectID:   strToPtr("projectid"),
 				serviceName: strToPtr("service"),
 				version:     strToPtr("version"),
+				traceID:     strToPtr("trace_id/xxxxxx"),
 			},
 			expected: expected{
 				projectID:   "projectid",
 				serviceName: "service",
 				version:     "version",
+				traceID:     "trace_id",
 			},
 		},
 		{
-			name: "環境変数未設定_空文字が設定されること",
+			name: "環境変数、リクエストヘッダ未設定_空文字が設定されること",
 			prepare: prepare{
 				projectID:   nil,
 				serviceName: nil,
 				version:     nil,
+				traceID:     nil,
 			},
 			expected: expected{
 				projectID:   "",
 				serviceName: "",
 				version:     "",
+				traceID:     "",
 			},
 		},
 	}
@@ -170,6 +176,34 @@ func TestVersion(t *testing.T) {
 			assertions := assert.New(t)
 
 			got := Version(c.in)
+			assertions.Equal(c.expected, got)
+		})
+	}
+}
+
+func TestTraceID(t *testing.T) {
+	cases := []struct {
+		name     string
+		in       context.Context
+		expected string
+	}{
+		{
+			name:     "トレースIDの設定済み_設定されたトレースID取得",
+			in:       contextWithValue(ContextKeyTraceID, "trace_id"),
+			expected: "trace_id",
+		},
+		{
+			name:     "トレースIDの未設定_空文字取得",
+			in:       context.Background(),
+			expected: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			assertions := assert.New(t)
+
+			got := TraceID(c.in)
 			assertions.Equal(c.expected, got)
 		})
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type contextKey string
@@ -12,6 +13,7 @@ const (
 	contextKeyProjectID   contextKey = "project_id"
 	contextKeyServiceName contextKey = "service_name"
 	contextKeyVersion     contextKey = "version"
+	contextKeyTraceID     contextKey = "trace_id"
 )
 
 // NewContext App Engine用のContextオブジェクトを生成する
@@ -21,6 +23,8 @@ func NewContext(r *http.Request) context.Context {
 	ctx = context.WithValue(ctx, contextKeyProjectID, os.Getenv("GOOGLE_CLOUD_PROJECT"))
 	ctx = context.WithValue(ctx, contextKeyServiceName, os.Getenv("GAE_SERVICE"))
 	ctx = context.WithValue(ctx, contextKeyVersion, os.Getenv("GAE_VERSION"))
+	traceID := strings.SplitN(r.Header.Get("X-Cloud-Trace-Context"), "/", 2)[0]
+	ctx = context.WithValue(ctx, contextKeyTraceID, traceID)
 
 	return ctx
 }
@@ -41,6 +45,12 @@ func ServiceName(ctx context.Context) string {
 // 値が取得できない場合は空文字列を返す
 func Version(ctx context.Context) string {
 	return strOrBlank(ctx, contextKeyVersion)
+}
+
+// TraceID トレースIDの情報を取得する
+// 値が取得できない場合は空文字列を返す
+func TraceID(ctx context.Context) string {
+	return strOrBlank(ctx, contextKeyTraceID)
 }
 
 func strOrBlank(ctx context.Context, key contextKey) string {
