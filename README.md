@@ -1,14 +1,11 @@
 # goutils
+[![GoDoc](https://godoc.org/github.com/topgate/goutils?status.svg)](https://godoc.org/github.com/topgate/goutils)
 
-goutils
+Go言語ユーティリティライブラリ集
 
-file 構成
-
-    goutils                 # root
-    |- interop              # 機能間の連携用ライブラリ
-    |   ├─ exel             # 日本語excelとの連携ライブラリ
-    │   |   ├─ csv/         # goutils版encoding/csv
-    │   |   │
-    │   |   └─ gocsv/       # goutils版gocsv
-
-
+## ライブラリ
+| ライブラリ        | Package                                                                                        |
+|-------------------|------------------------------------------------------------------------------------------------|
+| Excel対応CSV出力  | github.com/topgate/goutils/interop/excel/csv<br>github.com/topgate/goutils/interop/excel/gocsv |
+| AppEngine共通処理 | github.com/topgate/goutils/gcp/appengine                                                       |
+| AppEngineロギング | github.com/topgate/goutils/gcp/appengine/log                                                   |
