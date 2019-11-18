@@ -3,7 +3,7 @@
 Go 言語ユーティリティライブラリ集
 
 [![GoDoc](https://godoc.org/github.com/topgate/goutils?status.svg)](https://godoc.org/github.com/topgate/goutils)
-[![CircleCI](https://circleci.com/gh/topgate/goutils.svg?style=svg)](https://circleci.com/gh/topgate/goutils)
+[![CircleCI](https://circleci.com/gh/topgate/goutils.svg?style=shield)](https://circleci.com/gh/topgate/goutils)
 
 ## Installing / Getting started
 
