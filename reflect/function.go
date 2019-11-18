@@ -1,3 +1,4 @@
+// Package reflect リフレクション関係の機能をまとめたパッケージ
 package reflect
 
 import (

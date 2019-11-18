@@ -1,3 +1,4 @@
+// Package csv エクセルとCSVを相互運用するためのパッケージ
 package csv
 
 import (
@@ -38,9 +39,13 @@ func NewReader(r io.Reader) *csv.Reader {
 
 // NewSJISWriter 与えられたio.Writerを元に新しいSJISのcsvライターを返す。UseCRLFはデフォルトでtrueが設定される
 func NewSJISWriter(w io.Writer) *csv.Writer {
+	/*
+		panicが発生するため*bufio.Writerをwに与えてはならない
+		*bufio.Writerを与えるとpanicになるのは、返されるWriterのFlushを呼び出しても、与えた*bufio.WriterのFlushが呼び出されないため
+		これはencoding/csvのWriterの設計に依存する制約である
+	*/
 	if _, ok := w.(*bufio.Writer); ok {
 		panic("Can't use *bufio.Writer")
-
 	}
 	writer := csv.NewWriter(transform.NewWriter(w, japanese.ShiftJIS.NewEncoder()))
 	writer.UseCRLF = true
@@ -49,6 +54,11 @@ func NewSJISWriter(w io.Writer) *csv.Writer {
 
 // NewUTF8WithBOMWriter 与えられたio.Writerを元に新しいBOM付きUTF8のcsvライターを返す。UseCRLFはデフォルトでtrueが設定される
 func NewUTF8WithBOMWriter(w io.Writer) *csv.Writer {
+	/*
+		panicが発生するため*bufio.Writerをwに与えてはならない
+		*bufio.Writerを与えるとpanicになるのは、返されるWriterのFlushを呼び出しても、与えた*bufio.WriterのFlushが呼び出されないため
+		これはencoding/csvのWriterの設計に依存する制約である
+	*/
 	if _, ok := w.(*bufio.Writer); ok {
 		panic("Can't use *bufio.Writer")
 	}
