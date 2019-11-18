@@ -1,14 +1,51 @@
 # goutils
 
-goutils
+Go 言語ユーティリティライブラリ集
 
-file 構成
+[![GoDoc](https://godoc.org/github.com/topgate/goutils?status.svg)](https://godoc.org/github.com/topgate/goutils)
+[![CircleCI](https://circleci.com/gh/topgate/goutils.svg?style=shield)](https://circleci.com/gh/topgate/goutils)
 
-    goutils                 # root
-    |- interop              # 機能間の連携用ライブラリ
-    |   ├─ exel             # 日本語excelとの連携ライブラリ
-    │   |   ├─ csv/         # goutils版encoding/csv
-    │   |   │
-    │   |   └─ gocsv/       # goutils版gocsv
+## Installing / Getting started
 
+A quick introduction of the minimal setup you need to get a hello world up &
+running.
 
+```shell
+go get github.com/topgate/goutils
+```
+
+または、go mod を使用している場合、ソースコード中に `github.com/topgate/goutils` のパッケージを参照している状態で、
+
+```shell
+go mod tidy
+```
+
+を実行する
+
+## Developing
+
+```shell
+git clone https://github.com/topgate/goutils.git
+cd goutils
+go mod tidy
+```
+
+### Testing
+
+テスト実行手順を以下に示す
+
+```shell
+cd goutils
+go test ./...
+```
+
+## Features
+
+このライブラリで提供する機能
+
+- Excel に対応した CSV の出力 (encoding/csv,gocsv に対応したパッケージ)
+- AppEngine 用のロギング
+
+## Licensing
+
+https://github.com/topgate/goutils/blob/master/LICENSE
