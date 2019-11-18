@@ -37,7 +37,7 @@ func Debug(ctx context.Context, v interface{}) {
 }
 
 func debugf(ctx context.Context, msg string) {
-	logPrintf(ctx, severityDebug, 2, msg)
+	logPrintf(ctx, severityDebug, msg)
 }
 
 // Infof 情報ログを出力する
@@ -51,7 +51,7 @@ func Info(ctx context.Context, v interface{}) {
 }
 
 func infof(ctx context.Context, msg string) {
-	logPrintf(ctx, severityInfo, 2, msg)
+	logPrintf(ctx, severityInfo, msg)
 }
 
 // Errorf エラーログを出力する
@@ -65,7 +65,7 @@ func Error(ctx context.Context, v interface{}) {
 }
 
 func errorf(ctx context.Context, msg string) {
-	logPrintf(ctx, severityError, 2, msg)
+	logPrintf(ctx, severityError, msg)
 }
 
 // Warningf 警告ログを出力する
@@ -79,7 +79,7 @@ func Warning(ctx context.Context, v interface{}) {
 }
 
 func warningf(ctx context.Context, msg string) {
-	logPrintf(ctx, severityWarn, 2, msg)
+	logPrintf(ctx, severityWarn, msg)
 }
 
 // Criticalf 重大エラーログを出力する
@@ -93,10 +93,10 @@ func Critical(ctx context.Context, v interface{}) {
 }
 
 func criticalf(ctx context.Context, msg string) {
-	logPrintf(ctx, severityCritical, 2, msg)
+	logPrintf(ctx, severityCritical, msg)
 }
 
-func logPrintf(ctx context.Context, s severity, skipFrame int, msg string) {
+func logPrintf(ctx context.Context, s severity, msg string) {
 	// プレフィックスに余計な文字列がつかないようにLoggerオブジェクトを作成
 	logger := log.New(getWriter(), "", 0)
 
@@ -104,7 +104,7 @@ func logPrintf(ctx context.Context, s severity, skipFrame int, msg string) {
 	var (
 		projectID = appengine.ProjectID(ctx)
 		traceID   = appengine.TraceID(ctx)
-		info, _   = getCallerInfo(skipFrame + 1)
+		info, _   = getCallerInfo(3)
 	)
 	if projectID == "" || traceID == "" {
 		logger.Println("application might not be run in App Engine")

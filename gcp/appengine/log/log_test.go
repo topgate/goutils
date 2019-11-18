@@ -20,8 +20,8 @@ func TestPrintf(t *testing.T) {
 		Line:   10,
 	}
 	const (
-		projectID = "test_project"
-		traceID   = "trace_id"
+		projectID = "printf_test"
+		traceID   = "printf_test_trace_id"
 	)
 
 	type (
@@ -109,8 +109,8 @@ func TestPrint(t *testing.T) {
 		Line:   10,
 	}
 	const (
-		projectID = "test_project"
-		traceID   = "trace_id"
+		projectID = "print_test_test_project"
+		traceID   = "print_test_trace_id"
 	)
 
 	cases := []struct {
