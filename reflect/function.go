@@ -2,6 +2,7 @@
 package reflect
 
 import (
+	"errors"
 	"reflect"
 	"runtime"
 	"strings"
@@ -16,5 +17,10 @@ func GetFunctionName(i interface{}) string {
 
 // GetFunctionFullName 関数のフルネームを取得する
 func GetFunctionFullName(i interface{}) string {
+	v := reflect.ValueOf(i)
+	t := v.Type()
+	if t.Kind() != reflect.Func {
+		panic(errors.New("argument is not function type"))
+	}
 	return runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
 }
