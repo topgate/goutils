@@ -14,10 +14,13 @@ func Example_writer() {
 	}
 	writer := csv.NewUTF8WithBOMWriter(file)
 	defer writer.Flush()
-	writer.WriteAll([][]string{
+	err = writer.WriteAll([][]string{
 		[]string{"header1", "header2"},
 		[]string{"val1", "val2"},
 	})
+	if err != nil {
+		panic(err)
+	}
 }
 
 func Example_reader() {
@@ -39,7 +42,6 @@ func ExampleNewUTF8WithBOMReader() {
 		panic(err)
 	}
 	csv.NewUTF8WithBOMReader(file)
-	// Output: BOM付きUTF8が読み取り可能な *csv.Reader
 }
 
 func ExampleNewSJISReader() {
@@ -48,7 +50,6 @@ func ExampleNewSJISReader() {
 		panic(err)
 	}
 	csv.NewSJISReader(file)
-	// Output: SJISが読み取り可能な *csv.Reader
 }
 
 func ExampleNewReader() {
@@ -57,7 +58,6 @@ func ExampleNewReader() {
 		panic(err)
 	}
 	csv.NewReader(file)
-	// Output: SJIS,BOM付きUTF8両方が読み取り可能な *csv.Reader
 }
 
 func ExampleNewSJISWriter() {
@@ -66,8 +66,6 @@ func ExampleNewSJISWriter() {
 		panic(err)
 	}
 	csv.NewSJISWriter(file)
-	// Output: SJISで書き込み可能な *csv.Writer
-
 }
 
 func ExampleNewUTF8WithBOMWriter() {
@@ -76,6 +74,4 @@ func ExampleNewUTF8WithBOMWriter() {
 		panic(err)
 	}
 	csv.NewUTF8WithBOMWriter(file)
-	// Output: BOM付きUTF8で書き込み可能な *csv.Writer
-
 }

@@ -24,7 +24,6 @@ func ExampleMarshal() {
 	if err := gocsv.Marshal(users, file); err != nil {
 		panic(err)
 	}
-	// Output: User構造体のCSVデータ
 }
 
 func ExampleUnmarshal() {
@@ -41,5 +40,4 @@ func ExampleUnmarshal() {
 	if err := gocsv.Unmarshal(file, users); err != nil {
 		panic(err)
 	}
-	// Output: CSVから読み取ったUser情報
 }
