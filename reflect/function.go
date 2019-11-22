@@ -9,6 +9,8 @@ import (
 )
 
 // GetFunctionName 関数名を取得する
+//
+// iが関数以外だった場合、panicが発生する
 func GetFunctionName(i interface{}) string {
 	pationalNames := strings.Split(GetFunctionFullName(i), "/")
 	return pationalNames[len(pationalNames)-1]
@@ -16,6 +18,8 @@ func GetFunctionName(i interface{}) string {
 }
 
 // GetFunctionFullName 関数のフルネームを取得する
+//
+// iが関数以外だった場合、panicが発生する
 func GetFunctionFullName(i interface{}) string {
 	v := reflect.ValueOf(i)
 	t := v.Type()
