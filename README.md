@@ -35,7 +35,6 @@ go mod tidy
 テスト実行手順を以下に示す
 
 ```shell
-cd goutils
 go test ./...
 ```
 
