@@ -106,9 +106,6 @@ func logPrintf(ctx context.Context, s severity, msg string) {
 		traceID   = appengine.TraceID(ctx)
 		info, _   = getCallerInfo(3)
 	)
-	if projectID == "" || traceID == "" {
-		logger.Println("application might not be run in App Engine")
-	}
 
 	// 設定可能な特殊フィールドについては次を参照
 	//   https://cloud.google.com/logging/docs/agent/configuration?hl=ja#special-fields
