@@ -69,7 +69,8 @@ func TestMarshal(t *testing.T) {
 		expected expected
 		given    interface{}
 	}{
-		{"Sample1",
+		{
+			"Sample1",
 			expected{
 				data: append(csv.UTF8BOM[:], []byte("id,name\r\n22,sample_name\r\n")...),
 			},
@@ -80,7 +81,8 @@ func TestMarshal(t *testing.T) {
 				},
 			},
 		},
-		{"非配列",
+		{
+			"非配列",
 			expected{
 				err: errors.New("cannot use gocsv.Sample, only slice or array supported"),
 			},
