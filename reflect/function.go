@@ -2,7 +2,7 @@
 package reflect
 
 import (
-	"errors"
+	"fmt"
 	"reflect"
 	"runtime"
 	"strings"
@@ -20,7 +20,7 @@ func GetFunctionFullName(i interface{}) string {
 	v := reflect.ValueOf(i)
 	t := v.Type()
 	if t.Kind() != reflect.Func {
-		panic(errors.New("argument is not function type"))
+		panic(fmt.Errorf("The %s kind is not function type", t.Kind()))
 	}
 	return runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
 }

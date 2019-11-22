@@ -41,7 +41,7 @@ func TestGetFunctionName_Panic(t *testing.T) {
 		given    interface{}
 	}{
 		{"関数名", expected{
-			err: errors.New("argument is not function type"),
+			err: errors.New("The ptr kind is not function type"),
 		}, &struct{}{}},
 	}
 	for _, tt := range tests {
@@ -69,7 +69,7 @@ func TestGetFunctionFullName_Panic(t *testing.T) {
 		given    interface{}
 	}{
 		{"関数名", expected{
-			err: errors.New("argument is not function type"),
+			err: errors.New("The ptr kind is not function type"),
 		}, &struct{}{}},
 	}
 	for _, tt := range tests {
