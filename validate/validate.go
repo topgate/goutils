@@ -32,5 +32,7 @@ func init() {
 		}
 		return fieldName
 	})
-	ja_translations.RegisterDefaultTranslations(validate, Translator)
+	if err := ja_translations.RegisterDefaultTranslations(validate, Translator); err != nil {
+		panic(err)
+	}
 }
