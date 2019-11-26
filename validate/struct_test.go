@@ -61,17 +61,17 @@ func TestStructErrorMessage(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			actual := Struct(tt.given)
 			assertions := assert.New(t)
-			errs, ok := GetValidationErrors(actual)
+			ve, ok := actual.(*ValidationError)
 			if tt.expected.err == nil {
 				assertions.NoError(actual)
-				assertions.Nil(errs)
+				assertions.Nil(ve)
 				assertions.False(ok)
 			} else {
-				assertions.NotNil(errs)
+				assertions.NotNil(ve)
 				assertions.True(ok)
 				var actualMessages []string
-				for _, err := range errs {
-					actualMessages = append(actualMessages, err.Translate(Translator))
+				for _, err := range ve.FiledErrors {
+					actualMessages = append(actualMessages, err.Error())
 				}
 				assertions.EqualValues(tt.expected.messages, actualMessages)
 				assertions.EqualError(actual, tt.expected.err.Error())

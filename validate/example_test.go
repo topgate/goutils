@@ -6,7 +6,7 @@ import (
 	"github.com/topgate/goutils/validate"
 )
 
-func Example() {
+func ExampleStruct() {
 	type User struct {
 		ID   int    `validate:"min=1"`
 		Name string `validate:"len=5" fieldname:"名前"`
@@ -24,7 +24,7 @@ func Example() {
 	// 名前の長さは5文字でなければなりません
 }
 
-func Example_detailError() {
+func ExampleStruct_fieldErrors() {
 
 	type User struct {
 		ID   int    `validate:"min=1"`
@@ -37,9 +37,11 @@ func Example_detailError() {
 	}
 
 	err := validate.Struct(user)
-	errs, _ := validate.GetValidationErrors(err)
-	fmt.Println(errs[0].Translate(validate.Translator))
-	fmt.Println(errs[1].Translate(validate.Translator))
+	ve, ok := err.(*validate.ValidationError)
+	if ok {
+		fmt.Println(ve.FiledErrors[0].Error())
+		fmt.Println(ve.FiledErrors[1].Error())
+	}
 	// Output:
 	// IDは1かより大きくなければなりません
 	// 名前の長さは5文字でなければなりません
