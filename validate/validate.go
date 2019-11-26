@@ -11,9 +11,8 @@ import (
 )
 
 var (
-	validate *validator.Validate
-	// Translator validation結果メッセージの翻訳器
-	Translator ut.Translator
+	validate   *validator.Validate
+	translator ut.Translator
 )
 
 func init() {
@@ -21,7 +20,7 @@ func init() {
 	uni := ut.New(ja, ja)
 	validate = validator.New()
 	var found bool
-	Translator, found = uni.GetTranslator("ja")
+	translator, found = uni.GetTranslator("ja")
 	if !found {
 		panic("translator not found")
 	}
@@ -32,7 +31,7 @@ func init() {
 		}
 		return fieldName
 	})
-	if err := ja_translations.RegisterDefaultTranslations(validate, Translator); err != nil {
+	if err := ja_translations.RegisterDefaultTranslations(validate, translator); err != nil {
 		panic(err)
 	}
 }
