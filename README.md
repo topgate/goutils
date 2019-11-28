@@ -44,6 +44,7 @@ go test ./...
 
 - Excel に対応した CSV の出力 (encoding/csv,gocsv に対応したパッケージ)
 - AppEngine 用のロギング
+- 構造体のバリデーション
 
 ## Licensing
 
