@@ -33,13 +33,13 @@ func ProjectID(ctx context.Context) string {
 	return strOrBlank(ctx, contextKeyProjectID{})
 }
 
-// ServiceName App Engineサービス名を取得する
+// ServiceName App Engineのサービス名を取得する
 // 値が取得できない場合は空文字列を返す
 func ServiceName(ctx context.Context) string {
 	return strOrBlank(ctx, contextKeyServiceName{})
 }
 
-// Version App Engineサービス名を取得する
+// Version App Engineのバージョン名を取得する
 // 値が取得できない場合は空文字列を返す
 func Version(ctx context.Context) string {
 	return strOrBlank(ctx, contextKeyVersion{})
