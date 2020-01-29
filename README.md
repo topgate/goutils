@@ -42,9 +42,9 @@ go test ./...
 
 このライブラリで提供する機能
 
-- Excel に対応した CSV の出力 (encoding/csv,gocsv に対応したパッケージ)
-- AppEngine 用のロギング
-- 構造体のバリデーション
+- [Excel に対応した CSV の出力](https://godoc.org/github.com/topgate/goutils/interop/excel) (encoding/csv,gocsv に対応したパッケージ)
+- [AppEngine 用のロギング](https://godoc.org/github.com/topgate/goutils/gcp/appengine/log)
+- [構造体のバリデーション](https://godoc.org/github.com/topgate/goutils/validate)
 
 ## Licensing
 
