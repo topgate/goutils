@@ -28,7 +28,7 @@ func runInTransaction(beginFunc func() (*sql.Tx, error), runFunc func(tx *sql.Tx
 	defer func() {
 		err := recover()
 		if err != nil {
-			tx.Rollback()
+			_ = tx.Rollback()
 			panic(err)
 		}
 	}()
