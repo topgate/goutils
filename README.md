@@ -2,7 +2,7 @@
 
 Go 言語ユーティリティライブラリ集
 
-[![GoDoc](https://godoc.org/github.com/topgate/goutils?status.svg)](https://godoc.org/github.com/topgate/goutils)
+[![GoDoc](https://pkg.go.dev/github.com/topgate/goutils?status.svg)](https://pkg.go.dev/github.com/topgate/goutils)
 [![CircleCI](https://circleci.com/gh/topgate/goutils.svg?style=shield)](https://circleci.com/gh/topgate/goutils)
 
 ## Installing / Getting started
@@ -42,10 +42,10 @@ go test ./...
 
 このライブラリで提供する機能
 
-- [Excel に対応した CSV の出力](https://godoc.org/github.com/topgate/goutils/interop/excel) (encoding/csv,gocsv に対応したパッケージ)
-- [AppEngine 用のロギング](https://godoc.org/github.com/topgate/goutils/gcp/appengine/log)
-- [構造体のバリデーション](https://godoc.org/github.com/topgate/goutils/validate)
-- [SQL 拡張](https://godoc.org/github.com/topgate/goutils/sqlx)
+- [Excel に対応した CSV の出力](https://pkg.go.dev/github.com/topgate/goutils/interop/excel?tab=subdirectories) (encoding/csv,gocsv に対応したパッケージ)
+- [AppEngine 用のロギング](https://pkg.go.dev/github.com/topgate/goutils/gcp/appengine/log)
+- [構造体のバリデーション](https://pkg.go.dev/github.com/topgate/goutils/validate)
+- [SQL 拡張](https://pkg.go.dev/github.com/topgate/goutils/sqlx)
 
 ## Licensing
 
