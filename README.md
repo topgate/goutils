@@ -2,7 +2,7 @@
 
 Go 言語ユーティリティライブラリ集
 
-[![GoDoc](https://pkg.go.dev/github.com/topgate/goutils?status.svg)](https://pkg.go.dev/github.com/topgate/goutils)
+[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/topgate/goutils)
 [![CircleCI](https://circleci.com/gh/topgate/goutils.svg?style=shield)](https://circleci.com/gh/topgate/goutils)
 
 ## Installing / Getting started
