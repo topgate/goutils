@@ -1,9 +1,17 @@
 version: 2.1
+
+references:
+  docker_hub_authentication: &docker_hub_authentication
+    auth:
+      username: $DOCKERHUB_USER
+      password: $DOCKERHUB_PASSWORD
+
 executors:
   golang:
     working_directory: &working_directory "~/goutils"
     docker:
       - image: circleci/golang:1.11
+        <<: *docker_hub_authentication
         environment:
           TZ: "Asia/Tokyo"
           GOPATH: &gopath "/home/circleci/go"
@@ -12,6 +20,7 @@ executors:
     working_directory: *working_directory
     docker:
       - image: golangci/golangci-lint
+        <<: *docker_hub_authentication
         environment:
           GOPATH: *gopath
 
@@ -97,19 +106,31 @@ workflows:
   version: 2
   test:
     jobs:
-      - prepare_source
+      - prepare_source:
+          context:
+            - docker-hub-credentials
       - prepare_go:
           requires:
             - prepare_source
+          context:
+            - docker-hub-credentials
       - test_go:
           requires:
             - prepare_go
+          context:
+            - docker-hub-credentials
   lint:
     jobs:
-      - prepare_source
+      - prepare_source:
+          context:
+            - docker-hub-credentials
       - prepare_go:
           requires:
             - prepare_source
+          context:
+            - docker-hub-credentials
       - lint_go:
           requires:
             - prepare_go
+          context:
+            - docker-hub-credentials
