@@ -121,7 +121,9 @@ workflows:
             - docker-hub-credentials
   lint:
     jobs:
-      - prepare_source
+      - prepare_source:
+          context:
+            - docker-hub-credentials
       - prepare_go:
           requires:
             - prepare_source
