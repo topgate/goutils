@@ -11,6 +11,7 @@ executors:
     working_directory: &working_directory "~/goutils"
     docker:
       - image: circleci/golang:1.11
+        <<: *docker_hub_authentication
         environment:
           TZ: "Asia/Tokyo"
           GOPATH: &gopath "/home/circleci/go"
@@ -20,6 +21,7 @@ executors:
     working_directory: *working_directory
     docker:
       - image: golangci/golangci-lint
+        <<: *docker_hub_authentication
         environment:
           GOPATH: *gopath
         <<: *docker_hub_authentication
